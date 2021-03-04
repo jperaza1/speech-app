@@ -1,0 +1,17 @@
+.content {
+  padding: 15px;
+  overflow: auto;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.card {
+  min-height: 128px;
+  margin-bottom: 15px;
+}
+
+.title {
+  margin-right: 15px;
+}

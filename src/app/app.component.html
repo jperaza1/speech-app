@@ -1,0 +1,26 @@
+<div class="content">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-md-offset-1 col-lg-12 col-lg-offset-2">
+
+
+
+      <mat-card class="card">
+        <div class="h4 title text-uppercase inline">Web Speech API</div>
+        <p>Press the start button and say something..</p>
+        <button mat-button class="inline" color="warn"
+                [disabled]="webSpeechSubscription"
+                (click)="startWebSpeech()">START
+        </button>
+        <div class="spacer"></div>
+        <mat-card-content class="mb-0">
+          <textarea mdInput rows="10" [disabled]="!webSpeechTranscript" style="width: 100%;"
+            placeholder="Audio Transcription" [(ngModel)]="webSpeechTranscript">
+          </textarea>
+        </mat-card-content>
+        <div class="spacer"></div>
+      </mat-card>
+    </div>
+  </div>
+
+
+</div>
