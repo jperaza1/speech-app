@@ -59,8 +59,8 @@ export class WebSpeechService {
         this.engine = this.createEngine();
         this.engine.continuous = true;
         this.engine.lang = 'en-US';
-        this.engine.interimResults = true;
-        this.engine.maxAlternatives = 1;
+        //this.engine.interimResults = true;
+        //this.engine.maxAlternatives = 1;
 
         this.engine.onerror = this.onerror.bind(this);
         this.engine.onresult = this.onresult.bind(this);
