@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DialogAlertComponent } from './components/dialog-alert/dialog-alert.component';
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 import { WebSpeechService } from './services/web-speech.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -13,9 +13,10 @@ import { MatButtonModule } from '@angular/material/button';
 @NgModule({
   declarations: [
     AppComponent,
-    DialogAlertComponent
+    AlertDialogComponent,
+    AlertDialogComponent
   ],
-  entryComponents: [DialogAlertComponent],
+  entryComponents: [AlertDialogComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

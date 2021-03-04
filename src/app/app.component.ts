@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription, Observable, Observer } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { WebSpeechService } from './services/web-speech.service';
-import { DialogAlertComponent } from './components/dialog-alert/dialog-alert.component';
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 
 
 @Component({
@@ -64,7 +64,7 @@ export class AppComponent implements OnInit {
   }
 
   private showAlert(title: string, text: string, retryCallback: Function) {
-    let dialogRef = this.dialog.open(DialogAlertComponent, {
+    let dialogRef = this.dialog.open(AlertDialogComponent, {
       data: {
         title: title,
         text: text
