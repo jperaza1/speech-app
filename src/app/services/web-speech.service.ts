@@ -140,7 +140,8 @@ export class WebSpeechService {
     }
 
     private async onresult(event: any) {
-        let url = await this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB_URL);
+        let url = await this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB);
+        console.log(url);
         this.zone.run(() => {
             this.transcriptText(event, url);
         });
