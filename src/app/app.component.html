@@ -18,6 +18,25 @@
           </textarea>
         </mat-card-content>
         <div class="spacer"></div>
+        <audio controls="" *ngIf="url">
+          <source [src]="sanitize(url)" type="audio/wav">
+        </audio>
+      </mat-card>
+
+      <mat-card class="card">
+        <div class="h4 title text-uppercase inline">Text to Speech API</div>
+        <p>Write something and press listen</p>
+        <button mat-button class="inline" color="warn"
+                [disabled]="webSpeechSubscription"
+                (click)="speeck()">LISTEN
+        </button>
+        <div class="spacer"></div>
+        <mat-card-content class="mb-0">
+          <textarea mdInput rows="10" style="width: 100%;"
+            placeholder="Audio Transcription" [(ngModel)]="textToVoice">
+          </textarea>
+        </mat-card-content>
+        <div class="spacer"></div>
       </mat-card>
     </div>
   </div>

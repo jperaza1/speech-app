@@ -9,6 +9,7 @@ import { WebSpeechService } from './services/web-speech.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { NgAudioRecorderModule } from 'ng-audio-recorder';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { MatButtonModule } from '@angular/material/button';
     FormsModule,
     MatCardModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    NgAudioRecorderModule
   ],
   providers: [WebSpeechService],
   bootstrap: [AppComponent],

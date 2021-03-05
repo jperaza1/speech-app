@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "start_dev": "ng serve",
     "start": "node server.js",
     "build": "ng build",
     "test": "ng test",
@@ -29,6 +30,7 @@
     "@angular/platform-browser-dynamic": "~11.2.3",
     "@angular/router": "~11.2.3",
     "express": "^4.17.1",
+    "ng-audio-recorder": "0.0.5",
     "path": "^0.12.7",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

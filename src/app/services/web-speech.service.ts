@@ -1,6 +1,8 @@
 import { Injectable, NgZone, EventEmitter } from '@angular/core';
+import { NgAudioRecorderService, OutputFormat } from 'ng-audio-recorder';
 import { Observable, Observer } from 'rxjs';
 import { IEvent } from '../models/IEvent';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 interface IWindow extends Window {
     webkitSpeechRecognition: any;
@@ -15,9 +17,15 @@ export class WebSpeechService {
 
     private recognizing = false;
     private observer: Observer<IEvent>;
-
-    constructor(private zone: NgZone) {
+    private blobUrl: string;
+    constructor(
+        private zone: NgZone,
+        private audioRecorderService: NgAudioRecorderService) {
         this.create();
+
+        this.audioRecorderService.recorderError.subscribe(recorderErrorCase => {
+            console.log(recorderErrorCase);
+        })
     }
 
     /**
@@ -27,7 +35,7 @@ export class WebSpeechService {
      */
     start(): Observable<IEvent> {
         if (!this.recognizing) {
-        this.engine.start();
+            this.engine.start();
         }
         return new Observable((observer: Observer<IEvent>) => { this.observer = this.observer || observer; });
     }
@@ -37,10 +45,9 @@ export class WebSpeechService {
      */
     stop() {
         this.engine.stop();
-
         if (this.observer) {
             // Give it some time to any additional event to propragate to subscribers...
-            setTimeout(() => { this.observer = null; }, 2000);
+            setTimeout(() => { this.observer = null; }, 500);
         }
     }
 
@@ -52,6 +59,10 @@ export class WebSpeechService {
         return this.recognizing;
     }
 
+    getUrlBlob(): string {
+        return this.blobUrl;
+    }
+
     /**
      * Helper function to create SpeechRecognition engine and bind relevant events.
      */
@@ -59,7 +70,7 @@ export class WebSpeechService {
         this.engine = this.createEngine();
         this.engine.continuous = true;
         this.engine.lang = 'en-US';
-        //this.engine.interimResults = true;
+        this.engine.interimResults = false;
         //this.engine.maxAlternatives = 1;
 
         this.engine.onerror = this.onerror.bind(this);
@@ -82,31 +93,35 @@ export class WebSpeechService {
 
     private onaudiostart() {
         this.recognizing = true;
+        this.audioRecorderService.startRecording();
 
         this.zone.run(() => {
             this.observer.next({
-            type: 'hint',
-            value: 'Capturing audio...'
+                type: 'hint',
+                value: 'Capturing audio...',
+                url: ''
             });
         });
     }
 
-    private onaudioend() {
+    private async onaudioend() {
         this.recognizing = false;
-
         this.zone.run(() => {
             this.observer.next({
-            type: 'hint',
-            value: 'Stopped capturing audio.'
+                type: 'hint',
+                value: 'Stopped capturing audio.',
+                url: ''
             });
         });
+        
     }
 
     private onnomatch() {
         this.zone.run(() => {
             this.observer.next({
-            type: 'hint',
-            value: 'No match!'
+                type: 'hint',
+                value: 'No match!',
+                url: ''
             });
         });
     }
@@ -124,9 +139,10 @@ export class WebSpeechService {
         this.stop();
     }
 
-    private onresult(event: any) {
+    private async onresult(event: any) {
+        let url = await this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB_URL);
         this.zone.run(() => {
-            this.transcriptText(event);
+            this.transcriptText(event, url);
         });
     }
 
@@ -134,12 +150,13 @@ export class WebSpeechService {
      * Basic parsing of the speech recognition result object, emitting 'tag' event for subscribers.
      * @param event The onresult event returned by the SpeechRecognition engine
      */
-    private transcriptText(event: any) {
+    private transcriptText(event: any, url) {
         for (let i = event.resultIndex; i < event.results.length; ++i) {
             if (event.results[i].isFinal) {
             this.observer.next({
                 type: 'tag',
-                value: event.results[i][0].transcript
+                value: event.results[i][0].transcript,
+                url: url
             });
             }
         }

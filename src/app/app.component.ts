@@ -3,6 +3,7 @@ import { Subscription, Observable, Observer } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { WebSpeechService } from './services/web-speech.service';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 
 @Component({
@@ -15,14 +16,25 @@ export class AppComponent implements OnInit {
 
   webSpeechSubscription: Subscription;
   webSpeechTranscript: string;
+  synth = window.speechSynthesis;
+  textToVoice: string;
+  url: string;
 
   constructor(
     private webSpeechService: WebSpeechService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private domSanitizer: DomSanitizer
   ){ }
 
-  ngOnInit() {
-    
+  async ngOnInit() {
+  }
+
+  speeck(){
+    var utterThis = new SpeechSynthesisUtterance(this.textToVoice);
+    utterThis.pitch = 1;
+    utterThis.rate = 1;
+    this.synth.speak(utterThis);
+    let voices = this.synth.getVoices();
   }
 
   ngOnDestroy() {
@@ -47,11 +59,14 @@ export class AppComponent implements OnInit {
 
   startWebSpeech() {
     this.webSpeechTranscript = null;
+    this.url = null;
     // this.webSpeechAnalysis = null;
     this.webSpeechSubscription = this.webSpeechService.start().subscribe((data: any) => {
       console.log('WebSpeechAPI: ' + JSON.stringify(data));
       if (data.type === 'tag') {
         this.webSpeechTranscript = data.value;
+        this.url = data.url;
+        
         this.stopWebSpeech(); // we want to get the first result and stop listening...
 
         //this.webSpeechAnalyseTranscript();
@@ -75,6 +90,10 @@ export class AppComponent implements OnInit {
         retryCallback();
       }
     });
+  }
+
+  sanitize(url: string) {
+    return this.domSanitizer.bypassSecurityTrustUrl(url);
   }
 
 }
