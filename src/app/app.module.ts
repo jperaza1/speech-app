@@ -10,6 +10,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { NgAudioRecorderModule } from 'ng-audio-recorder';
+import { MatInputModule } from '@angular/material/input';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { NgAudioRecorderModule } from 'ng-audio-recorder';
     MatCardModule,
     MatDialogModule,
     MatButtonModule,
-    NgAudioRecorderModule
+    MatInputModule,
+    NgAudioRecorderModule,
+    HttpClientModule
   ],
   providers: [WebSpeechService],
   bootstrap: [AppComponent],

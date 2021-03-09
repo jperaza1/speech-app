@@ -1,8 +1,6 @@
 import { Injectable, NgZone, EventEmitter } from '@angular/core';
-import { NgAudioRecorderService, OutputFormat } from 'ng-audio-recorder';
 import { Observable, Observer } from 'rxjs';
 import { IEvent } from '../models/IEvent';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 interface IWindow extends Window {
     webkitSpeechRecognition: any;
@@ -20,12 +18,8 @@ export class WebSpeechService {
     private blobUrl: string;
     constructor(
         private zone: NgZone,
-        private audioRecorderService: NgAudioRecorderService) {
+        ) {
         this.create();
-
-        this.audioRecorderService.recorderError.subscribe(recorderErrorCase => {
-            console.log(recorderErrorCase);
-        })
     }
 
     /**
@@ -59,10 +53,6 @@ export class WebSpeechService {
         return this.recognizing;
     }
 
-    getUrlBlob(): string {
-        return this.blobUrl;
-    }
-
     /**
      * Helper function to create SpeechRecognition engine and bind relevant events.
      */
@@ -93,13 +83,11 @@ export class WebSpeechService {
 
     private onaudiostart() {
         this.recognizing = true;
-        this.audioRecorderService.startRecording();
 
         this.zone.run(() => {
             this.observer.next({
                 type: 'hint',
-                value: 'Capturing audio...',
-                url: ''
+                value: 'Capturing audio...'
             });
         });
     }
@@ -109,8 +97,7 @@ export class WebSpeechService {
         this.zone.run(() => {
             this.observer.next({
                 type: 'hint',
-                value: 'Stopped capturing audio.',
-                url: ''
+                value: 'Stopped capturing audio.'
             });
         });
         
@@ -120,8 +107,7 @@ export class WebSpeechService {
         this.zone.run(() => {
             this.observer.next({
                 type: 'hint',
-                value: 'No match!',
-                url: ''
+                value: 'No match!'
             });
         });
     }
@@ -140,10 +126,8 @@ export class WebSpeechService {
     }
 
     private async onresult(event: any) {
-        let url = await this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB);
-        console.log(url);
         this.zone.run(() => {
-            this.transcriptText(event, url);
+            this.transcriptText(event);
         });
     }
 
@@ -151,13 +135,12 @@ export class WebSpeechService {
      * Basic parsing of the speech recognition result object, emitting 'tag' event for subscribers.
      * @param event The onresult event returned by the SpeechRecognition engine
      */
-    private transcriptText(event: any, url) {
+    private transcriptText(event: any) {
         for (let i = event.resultIndex; i < event.results.length; ++i) {
             if (event.results[i].isFinal) {
             this.observer.next({
                 type: 'tag',
-                value: event.results[i][0].transcript,
-                url: url
+                value: event.results[i][0].transcript
             });
             }
         }
