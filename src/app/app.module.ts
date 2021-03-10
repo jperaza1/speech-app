@@ -9,6 +9,7 @@ import { WebSpeechService } from './services/web-speech.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { NgAudioRecorderModule } from 'ng-audio-recorder';
 import { MatInputModule } from '@angular/material/input';
 import { HttpClientModule } from '@angular/common/http';
@@ -28,6 +29,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatDialogModule,
     MatButtonModule,
     MatInputModule,
+    MatIconModule,
     NgAudioRecorderModule,
     HttpClientModule
   ],

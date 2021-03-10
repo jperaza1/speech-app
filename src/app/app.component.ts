@@ -108,10 +108,24 @@ export class AppComponent implements OnInit {
             this.TallQuestion();
             break;
           case 8:
-              this.question(data.value);
-              break;
+            this.question(data.value);
+            break;
+          case 100:
+            this.update(data.value);
+            break;
+          case 102:
+            this.searchTruck(data.value);
+            break;
+          case 103:
+            this.globalQuestionNumber = 104;
+            this.TallQuestion();
+            break;
+          case 104:
+            this.globalQuestionNumber = 105;
+            this.TallQuestion();
+            break;
         }
-      } else if(data.type === 'hint' && this.globalQuestionNumber === 1 && data.value === 'Stopped capturing audio.'){
+      } else if(data.type === 'hint' && (this.globalQuestionNumber === 1 || this.globalQuestionNumber === 100) && data.value === 'Stopped capturing audio.'){
         this.stopWebSpeech();
         this.noSpeeckTall();
       }
@@ -190,6 +204,28 @@ export class AppComponent implements OnInit {
         await this.speeck('Sorry');
         await this.speeck('Please edit the necessary fields and click save');
         break;
+      case 100:
+        await this.speeck('How can I help you?');
+        this.webSpeech();
+        break;
+      case 101:
+        this.help();
+        break;
+      case 102:
+        await this.speeck('Sure. For which truck number?');
+        this.webSpeech();
+        break;
+      case 103:
+        await this.speeck('Was that the information you wanted?');
+        this.webSpeech();
+        break;
+      case 104:
+        await this.speeck('Do you want this update sent to the Broker Notification email?');
+        this.webSpeech();
+        break;
+      case 105:
+        await this.speeck('email send. thanks');
+        break;
     }
   }
 
@@ -228,6 +264,28 @@ export class AppComponent implements OnInit {
     await this.speeck(`
     Done! Your New Trip # is 2 3 4 3 2. I just texted you the confirmation. Bye.
     `);
+  }
+
+
+  async help(){
+    this.globalQuestionNumber = 100;
+    this.TallQuestion();
+  }
+
+  async update(data: string){
+    if(data.toLocaleLowerCase() === 'i need an update'){
+      this.globalQuestionNumber = 102;
+      this.TallQuestion();
+    }else {
+      this.globalQuestionNumber = 101;
+      this.TallQuestion();
+    }
+  }
+
+  async searchTruck(data: string){
+    await this.speeck('Let me check. SOS System shows that Truck 5 4 4 5 6 is currently on a Load from TQL, From Boston, MA To San Diego, CA, delivering today at 1 pm. The latest GPS update shows the truck 123 miles away from the destination.')
+    this.globalQuestionNumber = 103
+    this.TallQuestion();
   }
 
 }
