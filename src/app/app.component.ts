@@ -5,7 +5,8 @@ import { WebSpeechService } from './services/web-speech.service';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 import { ServiceHttp } from './service';
 import { TripDto } from './models/trip-dto';
-
+import { NgAudioRecorderService, OutputFormat } from 'ng-audio-recorder';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -22,11 +23,18 @@ export class AppComponent implements OnInit {
   webSpeechTranscript: string;
   synth = window.speechSynthesis;
   globalQuestionNumber: number = 1;
+  safeblobUrl:string;
   constructor(
     private webSpeechService: WebSpeechService,
     private dialog: MatDialog,
-    public _serviceHttp: ServiceHttp
-  ){ }
+    public _serviceHttp: ServiceHttp,
+    private audioRecorderService: NgAudioRecorderService,
+    private domSanitizer: DomSanitizer
+  ){ 
+    this.audioRecorderService.recorderError.subscribe(recorderErrorCase => {
+      // Handle Error
+    })
+  }
 
   async ngOnInit() {
   }
@@ -63,6 +71,7 @@ export class AppComponent implements OnInit {
   }
 
   async startWebSpeech() {
+    this.audioRecorderService.startRecording();
     await this.TallInstructions();
   }
 
@@ -199,6 +208,11 @@ export class AppComponent implements OnInit {
         await this.speeck(`
         Done! Your New Trip # is 2 3 4 3 2. I just texted you the confirmation. Bye.
         `);
+        this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB).then((output) => {
+          this.safeblobUrl = URL.createObjectURL(output);
+       }).catch(errrorCase => {
+           // Handle Error
+       });
         break;
       case 10:
         await this.speeck('Sorry');
@@ -260,6 +274,11 @@ export class AppComponent implements OnInit {
   }
 
   async saveManualLoans(){
+    this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB).then((output) => {
+      this.safeblobUrl = URL.createObjectURL(output);
+    }).catch(errrorCase => {
+       // Handle Error
+    });
     await this.speeck('Thank you. Give me a moment to process that information');
     await this.speeck(`
     Done! Your New Trip # is 2 3 4 3 2. I just texted you the confirmation. Bye.
@@ -286,6 +305,10 @@ export class AppComponent implements OnInit {
     await this.speeck('Let me check. SOS System shows that Truck 5 4 4 5 6 is currently on a Load from TQL, From Boston, MA To San Diego, CA, delivering today at 1 pm. The latest GPS update shows the truck 123 miles away from the destination.')
     this.globalQuestionNumber = 103
     this.TallQuestion();
+  }
+
+  sanitize(url: string) {
+    return this.domSanitizer.bypassSecurityTrustUrl(url);
   }
 
 }

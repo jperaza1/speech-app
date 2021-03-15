@@ -43,7 +43,13 @@
                 (click)="saveManualLoans()">Save
         </button>
 
+        <audio controls="" *ngIf="safeblobUrl">
+          <source [src]="sanitize(safeblobUrl)" type="audio/wav">
+        </audio>
 
+        <br/>
+        <br/>
+        <br/>
         <button mat-mini-fab color="primary" (click)="help()">
           <mat-icon aria-hidden="false" aria-label="Example home icon">help_outline</mat-icon>
         </button>
