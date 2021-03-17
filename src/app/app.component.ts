@@ -8,6 +8,7 @@ import { TripDto } from './models/trip-dto';
 import { NgAudioRecorderService, OutputFormat } from 'ng-audio-recorder';
 import { DomSanitizer } from '@angular/platform-browser';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
