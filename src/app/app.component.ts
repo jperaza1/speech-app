@@ -29,12 +29,11 @@ export class AppComponent implements OnInit {
     private webSpeechService: WebSpeechService,
     private dialog: MatDialog,
     public _serviceHttp: ServiceHttp,
-    private audioRecorderService: NgAudioRecorderService,
     private domSanitizer: DomSanitizer
   ){ 
-    this.audioRecorderService.recorderError.subscribe(recorderErrorCase => {
-      // Handle Error
-    })
+    // this.audioRecorderService.recorderError.subscribe(recorderErrorCase => {
+    //   // Handle Error
+    // })
   }
 
   async ngOnInit() {
@@ -72,7 +71,7 @@ export class AppComponent implements OnInit {
   }
 
   async startWebSpeech() {
-    this.audioRecorderService.startRecording();
+    // this.audioRecorderService.startRecording();
     await this.TallInstructions();
   }
 
@@ -209,11 +208,11 @@ export class AppComponent implements OnInit {
         await this.speeck(`
         Done! Your New Trip # is 2 3 4 3 2. I just texted you the confirmation. Bye.
         `);
-        this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB).then((output) => {
-          this.safeblobUrl = URL.createObjectURL(output);
-       }).catch(errrorCase => {
-           // Handle Error
-       });
+      //   this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB).then((output) => {
+      //     this.safeblobUrl = URL.createObjectURL(output);
+      //  }).catch(errrorCase => {
+      //      // Handle Error
+      //  });
         break;
       case 10:
         await this.speeck('Sorry');
@@ -275,11 +274,11 @@ export class AppComponent implements OnInit {
   }
 
   async saveManualLoans(){
-    this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB).then((output) => {
-      this.safeblobUrl = URL.createObjectURL(output);
-    }).catch(errrorCase => {
-       // Handle Error
-    });
+    // this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB).then((output) => {
+    //   this.safeblobUrl = URL.createObjectURL(output);
+    // }).catch(errrorCase => {
+    //    // Handle Error
+    // });
     await this.speeck('Thank you. Give me a moment to process that information');
     await this.speeck(`
     Done! Your New Trip # is 2 3 4 3 2. I just texted you the confirmation. Bye.
