@@ -42,7 +42,6 @@
         <button mat-button class="inline" color="warn" *ngIf="globalQuestionNumber === 10"
                 (click)="saveManualLoans()">Save
         </button>
-
         <audio controls="" *ngIf="safeblobUrl">
           <source [src]="sanitize(safeblobUrl)" type="audio/wav">
         </audio>
