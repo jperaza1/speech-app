@@ -167,7 +167,7 @@ export class AppComponent implements OnInit {
         await this.speeck('I am looking.....');
         this.backupConversation.push({ type: "Angie", conversation: 'I found some matches. I will offer the best 3 matches, based on your preferences of Destinations, Loaded Miles, and Rate Per Mile. Here they are:' });
         await this.speeck('I found some matches. I will offer the best 3 matches, based on your preferences of Destinations, Loaded Miles, and Rate Per Mile. Here they are:');
-        this.backupConversation.push({ type: "Angie", conversation: '1, Broker: CH Robinson, Origen: Atlanta, GA, which is 32 miles from your last delivery. Reefer Load, Fish, Destination: Los Angeles, CA, 2183 Loaded Miles, Rate Offered is $ 5500, an average of $2.50 per mile.		' });
+        this.backupConversation.push({ type: "Angie", conversation: '1, Broker: C H Robinson, Origen: Atlanta, GA, which is 32 miles from your last delivery. Reefer Load, Fish, Destination: Los Angeles, CA, 2183 Loaded Miles, Rate Offered is $ 5500, an average of $2.50 per mile.		' });
         await this.speeck('1, Broker: CH Robinson, Origen: Atlanta, GA, which is 32 miles from your last delivery. Reefer Load, Fish, Destination: Los Angeles, CA, 2183 Loaded Miles, Rate Offered is $ 5500, an average of $2.50 per mile.		');
         this.backupConversation.push({ type: "Angie", conversation: 'If you Like it, you can say "Book It", or "Make an Offer"' });
         await this.speeck('If you Like it, you can say "Book It", or "Make an Offer"    ');
@@ -233,18 +233,6 @@ export class AppComponent implements OnInit {
       this.webSpeech();
     }
     
-  }
-
-  async saveManualLoans(){
-    // this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB).then((output) => {
-    //   this.safeblobUrl = URL.createObjectURL(output);
-    // }).catch(errrorCase => {
-    //    // Handle Error
-    // });
-    await this.speeck('Thank you. Give me a moment to process that information');
-    await this.speeck(`
-    Done! Your New Trip # is 2 3 4 3 2. I just texted you the confirmation. Bye.
-    `);
   }
 
 
