@@ -213,7 +213,7 @@ export class AppComponent implements OnInit {
 
   private howCanIHelpYou(data: string) {
     this.backupConversation.push({ type: 'Client', conversation: data });
-    if(data.includes('look for a new')) {
+    if(data.toLowerCase().includes('look for a new')) {
       this.globalQuestionNumber = 2;
     } else {
       this.globalQuestionNumber = -1;
@@ -223,10 +223,10 @@ export class AppComponent implements OnInit {
 
   private anythingElseCanIHelpYou(data: string) {
     this.backupConversation.push({ type: 'Client', conversation: data });
-    if(data.includes("no")) {
+    if(data.toLowerCase().includes("no")) {
       this.globalQuestionNumber = 100;
       this.TallQuestion();
-    } else if(data.includes("make me the fuel route")) {
+    } else if(data.toLowerCase().includes("make me the fuel route")) {
       this.globalQuestionNumber = 8;
       this.TallQuestion();
     } else {
