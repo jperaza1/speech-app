@@ -15,7 +15,6 @@ export class WebSpeechService {
 
     private recognizing = false;
     private observer: Observer<IEvent>;
-    private blobUrl: string;
     constructor(
         private zone: NgZone,
         ) {

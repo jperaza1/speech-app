@@ -1,12 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription, Observable, Observer } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
 import { WebSpeechService } from './services/web-speech.service';
-import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 import { ServiceHttp } from './service';
 import { TripDto } from './models/trip-dto';
-import { NgAudioRecorderService, OutputFormat } from 'ng-audio-recorder';
-import { DomSanitizer } from '@angular/platform-browser';
+import { ConversationDto } from './models/conversation-dto';
 
 
 @Component({
@@ -23,13 +20,12 @@ export class AppComponent implements OnInit {
 
   webSpeechTranscript: string;
   synth = window.speechSynthesis;
-  globalQuestionNumber: number = 1;
+  globalQuestionNumber: number = 0;
   safeblobUrl:string;
+  backupConversation:ConversationDto[] = [];
   constructor(
     private webSpeechService: WebSpeechService,
-    private dialog: MatDialog,
     public _serviceHttp: ServiceHttp,
-    private domSanitizer: DomSanitizer
   ){ 
     // this.audioRecorderService.recorderError.subscribe(recorderErrorCase => {
     //   // Handle Error
@@ -37,12 +33,14 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit() {
+    const voices = this.synth.getVoices();
+    console.log(voices);
   }
 
   async speeck(text: string){
     return new Promise((resolve, reject) => {
       var utterThis = new SpeechSynthesisUtterance(text);
-      utterThis.pitch = 1;
+      utterThis.pitch = 0;
       utterThis.rate = 1;
       utterThis.lang = 'en-US';
       this.synth.speak(utterThis);
@@ -52,14 +50,6 @@ export class AppComponent implements OnInit {
 
   ngOnDestroy() {
     this.stopWebSpeech();
-  }
-
-  toggleWebSpeech() {
-    if (this.webSpeechService.isRecognizing()) {
-      this.stopWebSpeech();
-    } else {
-      this.startWebSpeech();
-    }
   }
 
   stopWebSpeech() {
@@ -72,7 +62,9 @@ export class AppComponent implements OnInit {
 
   async startWebSpeech() {
     // this.audioRecorderService.startRecording();
+    this.globalQuestionNumber = 1;
     await this.TallInstructions();
+    
   }
 
   async webSpeech(){
@@ -82,56 +74,42 @@ export class AppComponent implements OnInit {
         this.stopWebSpeech();
         switch(this.globalQuestionNumber){
           case 1:
-            this.model.truckNumber = data.value;
-            this.globalQuestionNumber = 2;
-            this.TallQuestion();
+            this.howCanIHelpYou(data.value);
+            break;
+          case -1:
+            this.howCanIHelpYou(data.value);
             break;
           case 2:
-            this.model.customer = data.value;
+            this.backupConversation.push({ type: 'Client', conversation: data.value });
             this.globalQuestionNumber = 3;
             this.TallQuestion();
             break;
           case 3:
-            this.model.origin = data.value;
+            this.backupConversation.push({ type: 'Client', conversation: data.value });
             this.globalQuestionNumber = 4;
             this.TallQuestion();
             break;
           case 4:
-            this.model.pickUp = data.value;
+            this.backupConversation.push({ type: 'Client', conversation: data.value });
             this.globalQuestionNumber = 5;
             this.TallQuestion();
             break;
           case 5:
-            this.model.destination = data.value;
+            this.backupConversation.push({ type: 'Client', conversation: data.value });
             this.globalQuestionNumber = 6;
             this.TallQuestion();
             break;
           case 6:
+            this.backupConversation.push({ type: 'Client', conversation: data.value });
             this.model.delivery = data.value;
             this.globalQuestionNumber = 7;
             this.TallQuestion();
             break;
           case 7:
-            this.model.customerRate = data.value;
-            this.globalQuestionNumber = 8;
-            this.TallQuestion();
+            this.anythingElseCanIHelpYou(data.value)
             break;
           case 8:
-            this.question(data.value);
-            break;
-          case 100:
-            this.update(data.value);
-            break;
-          case 102:
-            this.searchTruck(data.value);
-            break;
-          case 103:
-            this.globalQuestionNumber = 104;
-            this.TallQuestion();
-            break;
-          case 104:
-            this.globalQuestionNumber = 105;
-            this.TallQuestion();
+            this.anythingElseCanIHelpYou(data.value)
             break;
         }
       } else if(data.type === 'hint' && (this.globalQuestionNumber === 1 || this.globalQuestionNumber === 100) && data.value === 'Stopped capturing audio.'){
@@ -152,8 +130,8 @@ export class AppComponent implements OnInit {
   }
 
   async TallInstructions(){
-    await this.speeck('Lets create a New Trip');
-    await this.speeck('Please listen carefully to these questions');
+    this.backupConversation.push({ type: "Angie", conversation:'Hi, I am Angie, an SOS Virtual Dispatcher'});
+    await this.speeck("  Hi, I am Angie, an SOS Virtual Dispatcher....");
     this.TallQuestion();
   }
 
@@ -161,116 +139,100 @@ export class AppComponent implements OnInit {
     console.log(this.globalQuestionNumber);
     switch(this.globalQuestionNumber){
       case 1:
-        await this.speeck('Number 1');
-        await this.speeck('Which is the truck number for this Trip?');       
+        this.backupConversation.push({ type: "Angie", conversation: 'How can i help You ?' });
+        await this.speeck('...   How can i help You ?');    
         this.webSpeech();
         break;
       case 2:
-        await this.speeck('Number 2');
-        await this.speeck('Who is the Customer?');
+        this.backupConversation.push({ type: "Angie", conversation: 'Ofcourse,' });
+        await this.speeck('.... Ofcourse,');
+        this.backupConversation.push({ type: "Angie", conversation: 'I understand that you have a Reefer trailer. Is that correct?' });
+        await this.speeck('....  I understand that you have a Reefer trailer. Is that correct?');
         this.webSpeech();
         break;
       case 3:
-        await this.speeck('Number 3');
-        await this.speeck('What is the Origin?');
+        this.backupConversation.push({ type: "Angie", conversation: 'Pick Up Date ?' });
+        await this.speeck('    Pick Up Date ?');
         this.webSpeech();
         break;
       case 4:
-        await this.speeck('Number 4');
-        await this.speeck('When is the Pick Up?');
+        this.backupConversation.push({ type: "Angie", conversation: 'Where to?' });
+        await this.speeck('    Where to?');
+        this.backupConversation.push({ type: "Angie", conversation: 'You can ask for particular State, or say "Anywhere"' });
+        await this.speeck('    You can ask for particular State, or say "Anywhere"');
         this.webSpeech();
         break;
       case 5:
-        await this.speeck('Number 5');
-        await this.speeck('What is the Destination?');
+        this.backupConversation.push({ type: "Angie", conversation: 'I am looking' });
+        await this.speeck('I am looking.....');
+        this.backupConversation.push({ type: "Angie", conversation: 'I found some matches. I will offer the best 3 matches, based on your preferences of Destinations, Loaded Miles, and Rate Per Mile. Here they are:' });
+        await this.speeck('I found some matches. I will offer the best 3 matches, based on your preferences of Destinations, Loaded Miles, and Rate Per Mile. Here they are:');
+        this.backupConversation.push({ type: "Angie", conversation: '1, Broker: CH Robinson, Origen: Atlanta, GA, which is 32 miles from your last delivery. Reefer Load, Fish, Destination: Los Angeles, CA, 2183 Loaded Miles, Rate Offered is $ 5500, an average of $2.50 per mile.		' });
+        await this.speeck('1, Broker: CH Robinson, Origen: Atlanta, GA, which is 32 miles from your last delivery. Reefer Load, Fish, Destination: Los Angeles, CA, 2183 Loaded Miles, Rate Offered is $ 5500, an average of $2.50 per mile.		');
+        this.backupConversation.push({ type: "Angie", conversation: 'If you Like it, you can say "Book It", or "Make an Offer"' });
+        await this.speeck('If you Like it, you can say "Book It", or "Make an Offer"    ');
+        this.backupConversation.push({ type: "Angie", conversation: 'Or you can say "Next", and I will tell you about the Next Match. ' });
+        await this.speeck('Or you can say "Next", and I will tell you about the Next Match. ');
         this.webSpeech();
         break;
       case 6:
-        await this.speeck('Number 6');
-        await this.speeck('When is the Delivery?');
+        this.backupConversation.push({ type: "Angie", conversation: 'Sure. How much?' });
+        await this.speeck('Sure. How much?');
         this.webSpeech();
         break;
       case 7:
-        await this.speeck('Number 7');
-        await this.speeck('What is the Customer Rate?');
+        this.backupConversation.push({ type: "Angie", conversation: 'I am making your offer now, it may take a few seconds while they consider your Offer' });
+        await this.speeck('I am making your offer now, it may take a few seconds while they consider your Offer …');
+        this.backupConversation.push({ type: "Angie", conversation: `Congratulations!. CH Robinson accepted your offer of the Truck for $ ${this.model.delivery}. I am texting you their Load Number, and Our Load Number.` });
+        await this.speeck(`Congratulations!. CH Robinson accepted your offer of the Truck for $ ${this.model.delivery}. I am texting you their Load Number, and Our Load Number.`);
+        this.backupConversation.push({ type: "Angie", conversation: 'We make a good team "Juan".' });
+        await this.speeck('We make a good team "Juan".')
+        this.backupConversation.push({ type: "Angie", conversation: 'Anything else I can do for you?' });
+        await this.speeck('Anything else I can do for you?')
         this.webSpeech();
         break;
       case 8:
-        await this.speeck('Great. To confirm');
-        await this.speeck(`
-          This is a Load for Truck # ${this.model.truckNumber}, the customer is ${this.model.customer}, picking up in ${this.model.origin} on ${this.model.pickUp}, 
-          delivering to ${this.model.destination} on ${this.model.delivery}. And the Customer Rate is ${this.model.customerRate} Is this correct?
-        `);
+        this.backupConversation.push({ type: "Angie", conversation: 'This may take a few seconds. We are now looking for the best Fuel Prices along your Route, based on your Contracted Pricing' });
+        await this.speeck('This may take a few seconds. We are now looking for the best Fuel Prices along your Route, based on your Contracted Pricing......');
+        this.backupConversation.push({ type: "Angie", conversation: 'Done! I just texted you the Link with the Fuel Route' });
+        await this.speeck(`Done! I just texted you the Link with the Fuel Route..... `);
+        this.backupConversation.push({ type: "Angie", conversation: 'Anything else I can do for you?' });
+        await this.speeck('Anything else I can do for you?.....')
         this.webSpeech();
-        break;
-      case 9:
-        await this.speeck('Thank you. Give me a moment to process that information');
-        await this.speeck(`
-        Done! Your New Trip # is 2 3 4 3 2. I just texted you the confirmation. Bye.
-        `);
-      //   this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB).then((output) => {
-      //     this.safeblobUrl = URL.createObjectURL(output);
-      //  }).catch(errrorCase => {
-      //      // Handle Error
-      //  });
-        break;
-      case 10:
-        await this.speeck('Sorry');
-        await this.speeck('Please edit the necessary fields and click save');
-        break;
       case 100:
-        await this.speeck('How can I help you?');
+        this.backupConversation.push({ type: "Angie", conversation: 'If you need me, just touch my face on your Mobile App' });
+        await this.speeck('If you need me, just touch my face on your Mobile App');
+        break;
+      case -1:
+        this.backupConversation.push({ type: "Angie", conversation: "Sorry, I can't find anything. How can i help You ?" });
+        await this.speeck("Sorry, I can't find anything. How can i help You ?");
         this.webSpeech();
-        break;
-      case 101:
-        this.help();
-        break;
-      case 102:
-        await this.speeck('Sure. For which truck number?');
-        this.webSpeech();
-        break;
-      case 103:
-        await this.speeck('Was that the information you wanted?');
-        this.webSpeech();
-        break;
-      case 104:
-        await this.speeck('Do you want this update sent to the Broker Notification email?');
-        this.webSpeech();
-        break;
-      case 105:
-        await this.speeck('email send. thanks');
-        break;
     }
   }
 
-  private showAlert(title: string, text: string, retryCallback: Function) {
-    let dialogRef = this.dialog.open(AlertDialogComponent, {
-      data: {
-        title: title,
-        text: text
-      }
-    });
-    dialogRef.afterClosed().subscribe((retry) => {
-      if (retry) {
-        retryCallback();
-      }
-    });
-  }
 
-  private transformNumber(){
-
-  }
-
-  private question(data: string){
-    console.log(data);
-    this.model.isCorrect = data.toLocaleLowerCase() as string;
-
-    if(data === 'yes' || data === 'ok'){
-      this.globalQuestionNumber = 9
-    }else{
-      this.globalQuestionNumber = 10;
+  private howCanIHelpYou(data: string) {
+    this.backupConversation.push({ type: 'Client', conversation: data });
+    if(data.includes('look for a new')) {
+      this.globalQuestionNumber = 2;
+    } else {
+      this.globalQuestionNumber = -1;
     }
     this.TallQuestion();
+  }
+
+  private anythingElseCanIHelpYou(data: string) {
+    this.backupConversation.push({ type: 'Client', conversation: data });
+    if(data.includes("no")) {
+      this.globalQuestionNumber = 100;
+      this.TallQuestion();
+    } else if(data.includes("make me the fuel route")) {
+      this.globalQuestionNumber = 8;
+      this.TallQuestion();
+    } else {
+      this.webSpeech();
+    }
+    
   }
 
   async saveManualLoans(){
@@ -289,26 +251,6 @@ export class AppComponent implements OnInit {
   async help(){
     this.globalQuestionNumber = 100;
     this.TallQuestion();
-  }
-
-  async update(data: string){
-    if(data.toLocaleLowerCase() === 'i need an update'){
-      this.globalQuestionNumber = 102;
-      this.TallQuestion();
-    }else {
-      this.globalQuestionNumber = 101;
-      this.TallQuestion();
-    }
-  }
-
-  async searchTruck(data: string){
-    await this.speeck('Let me check. SOS System shows that Truck 5 4 4 5 6 is currently on a Load from TQL, From Boston, MA To San Diego, CA, delivering today at 1 pm. The latest GPS update shows the truck 123 miles away from the destination.')
-    this.globalQuestionNumber = 103
-    this.TallQuestion();
-  }
-
-  sanitize(url: string) {
-    return this.domSanitizer.bypassSecurityTrustUrl(url);
   }
 
 }

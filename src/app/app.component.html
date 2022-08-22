@@ -3,48 +3,14 @@
     <div class="col-sm-12 col-md-12 col-md-offset-1 col-lg-12 col-lg-offset-2">
       <mat-card class="card">
         <div class="h4 title text-uppercase inline">Web Speech API Create Loads</div>
-        <p>press the start button to start creating a Load</p>
         <button mat-button color="primary" class="inline" color="warn"
                 [disabled]="webSpeechSubscription"
-                (click)="startWebSpeech()">Create Loads
+                (click)="startWebSpeech()">SOS Virtual Dispatcher
         </button>
 
         <mat-card-content class="mb-0">
-          <mat-form-field class="example-full-width" style="width: 100%;">
-            <mat-label>Which is the truck number for this Trip?</mat-label>
-            <input matInput placeholder="" [(ngModel)]="model.truckNumber" [disabled]="!model.truckNumber">
-          </mat-form-field>
-          <mat-form-field class="example-full-width" style="width: 100%;">
-            <mat-label>Who is the Customer?</mat-label>
-            <input matInput placeholder="" [(ngModel)]="model.customer" [disabled]="!model.customer">
-          </mat-form-field>
-          <mat-form-field class="example-full-width" style="width: 100%;">
-            <mat-label>What is the Origin</mat-label>
-            <input matInput placeholder="" [(ngModel)]="model.origin" [disabled]="!model.origin">
-          </mat-form-field>
-          <mat-form-field class="example-full-width" style="width: 100%;">
-            <mat-label>When is the Pick Up</mat-label>
-            <input matInput placeholder="" [(ngModel)]="model.pickUp" [disabled]="!model.pickUp">
-          </mat-form-field>
-          <mat-form-field class="example-full-width" style="width: 100%;">
-            <mat-label>What is the destination point</mat-label>
-            <input matInput placeholder="" [(ngModel)]="model.destination" [disabled]="!model.destination">
-          </mat-form-field>
-          <mat-form-field class="example-full-width" style="width: 100%;">
-            <mat-label>When is the Delivery</mat-label>
-            <input matInput placeholder="" [(ngModel)]="model.delivery" [disabled]="!model.delivery">
-          </mat-form-field>
-          <mat-form-field class="example-full-width" style="width: 100%;">
-            <mat-label>What is the Customer Rate</mat-label>
-            <input matInput placeholder="" [(ngModel)]="model.customerRate" [disabled]="!model.customerRate">
-          </mat-form-field>      
+          <p *ngFor="let item of backupConversation" [ngStyle]="{ 'color': (item.type === 'Client') ? 'green': 'white', 'font-weight': 'bolder' }" >{{item.type}} - {{item.conversation}}</p>
         </mat-card-content>
-        <button mat-button class="inline" color="warn" *ngIf="globalQuestionNumber === 10"
-                (click)="saveManualLoans()">Save
-        </button>
-        <audio controls="" *ngIf="safeblobUrl">
-          <source [src]="sanitize(safeblobUrl)" type="audio/wav">
-        </audio>
 
         <br/>
         <br/>
@@ -54,22 +20,6 @@
         </button>
         
       </mat-card>
-
-      <!-- <mat-card class="card">
-        <div class="h4 title text-uppercase inline">Text to Speech API</div>
-        <p>Write something and press listen</p>
-        <button mat-button class="inline" color="warn"
-                [disabled]="webSpeechSubscription"
-                (click)="speeck()">LISTEN
-        </button>
-        <div class="spacer"></div>
-        <mat-card-content class="mb-0">w
-          <textarea mdInput rows="10" style="width: 100%;"
-            placeholder="Audio Transcription" [(ngModel)]="textToVoice">
-          </textarea>
-        </mat-card-content>
-        <div class="spacer"></div>
-      </mat-card> -->
     </div>
   </div>
 
