@@ -260,7 +260,7 @@ export class AppComponent implements OnInit {
 
   private howCanIHelpYou(data: string) {
     this.backupConversation.push({ type: 'Client', conversation: data });
-    if(data.toLowerCase().includes('look for a load') || data.toLowerCase().includes('Look for a new load') || data.toLowerCase().includes('find me a load')) {
+    if(data.toLowerCase().includes('look for a load') || data.toLowerCase().includes('look for a new load') || data.toLowerCase().includes('find me a load')) {
       this.globalQuestionNumber = 2;
     } else if (data.toLowerCase().includes('pod and') || data.toLocaleLowerCase().includes('lumper receipt')){
       this.globalQuestionNumber = 11;
@@ -272,7 +272,7 @@ export class AppComponent implements OnInit {
 
   private anythingElseCanIHelpYou(data: string) {
     this.backupConversation.push({ type: 'Client', conversation: data });
-    if(data.toLowerCase().includes("no") || data.toLowerCase().includes("no thanks") || data.toLowerCase().includes("no Thank you")) {
+    if(data.toLowerCase().includes("no") || data.toLowerCase().includes("no thanks") || data.toLowerCase().includes("no thank you")) {
       this.globalQuestionNumber = 100;
       this.TallQuestion();
     } else if(data.toLowerCase().includes("make me the fuel route")) {
