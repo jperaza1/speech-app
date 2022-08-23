@@ -263,7 +263,7 @@ export class AppComponent implements OnInit {
     if(data.toLowerCase().includes('look for a load') || data.toLowerCase().includes('Look for a new load') || data.toLowerCase().includes('find me a load')) {
       this.globalQuestionNumber = 2;
     } else if (data.toLowerCase().includes('pod and the lumper receipt')){
-      
+      this.globalQuestionNumber = 11;
     } else {
       this.globalQuestionNumber = -1;
     }
