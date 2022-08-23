@@ -76,6 +76,9 @@ export class AppComponent implements OnInit {
           case -1:
             this.howCanIHelpYou(data.value);
             break;
+          case -2:
+            this.youCanSay(data.value);
+            break;
           case 2:
             this.backupConversation.push({ type: 'Client', conversation: data.value });
             this.globalQuestionNumber = 3;
@@ -92,9 +95,10 @@ export class AppComponent implements OnInit {
             this.TallQuestion();
             break;
           case 5:
-            this.backupConversation.push({ type: 'Client', conversation: data.value });
-            this.globalQuestionNumber = 6;
-            this.TallQuestion();
+            this.youCanSay(data.value);
+            // this.backupConversation.push({ type: 'Client', conversation: data.value });
+            // this.globalQuestionNumber = 6;
+            // this.TallQuestion();
             break;
           case 6:
             this.backupConversation.push({ type: 'Client', conversation: data.value });
@@ -107,6 +111,9 @@ export class AppComponent implements OnInit {
             break;
           case 8:
             this.anythingElseCanIHelpYou(data.value)
+            break;
+          case 9:
+            this.youCanSay(data.value)
             break;
           case 11:
             this.backupConversation.push({ type: 'Client', conversation: data.value });
@@ -219,6 +226,15 @@ export class AppComponent implements OnInit {
         await this.speeck('Anything else I can do for you?.....')
         this.webSpeech();
         break;
+      case 9:
+        this.backupConversation.push({ type: "Angie", conversation: '2, Broker: C H Robinson, Origen is College Park, Georgia, which is 35 miles from your Last Delivery. It is a Reefer Load, Fish, and the destination is Houston, Texas. It has 784 Loaded Miles, and the rate offered is $ 2200, an average of $ 2.80 per mile. ' });
+        await this.speeck('2, Broker: C H Robinson, Origen is College Park, Georgia, which is 35 miles from your Last Delivery. It is a Reefer Load, Fish, and the destination is Houston, Texas. It has 784 Loaded Miles, and the rate offered is $ 2200, an average of $ 2.80 per mile. ');
+        this.backupConversation.push({ type: "Angie", conversation: 'If you Like it, you can say "Book It", or "Make an Offer"' });
+        await this.speeck('If you Like it, you can say "Book It", or "Make an Offer"    ');
+        this.backupConversation.push({ type: "Angie", conversation: 'Or you can say "Next", and I will tell you about the Next Match. ' });
+        await this.speeck('Or you can say "Next", and I will tell you about the Next Match. ');
+        this.webSpeech();
+        break;
       case 11: 
         this.backupConversation.push({ type: "Angie", conversation: 'Yes we do have the POD and Lumper Receipt for the Last Delivery in Los Angeles, CA. However, Billing is Pending. Do you want me to take care of the Billing Now?' });
         await this.speeck('Yes we do have the P O D and Lumper Receipt for the Last Delivery in Los Angeles, California. However, Billing is Pending. Do you want me to take care of the Billing Now?');
@@ -254,6 +270,14 @@ export class AppComponent implements OnInit {
         this.backupConversation.push({ type: "Angie", conversation: "Sorry, I can't find anything. How can i help You ?" });
         await this.speeck("Sorry, I can't find anything. How can i help You ?");
         this.webSpeech();
+      case -2:
+        this.backupConversation.push({ type: "Angie", conversation: "Sorry, I can't find anything" });
+        await this.speeck("Sorry, I can't find anything");
+        this.backupConversation.push({ type: "Angie", conversation: 'If you Like it, you can say "Book It", or "Make an Offer"' });
+        await this.speeck('If you Like it, you can say "Book It", or "Make an Offer"');
+        this.backupConversation.push({ type: "Angie", conversation: 'Or you can say "Next", and I will tell you about the Next Match.' });
+        await this.speeck('Or you can say "Next", and I will tell you about the Next Match.');
+        this.webSpeech();
     }
   }
 
@@ -266,6 +290,18 @@ export class AppComponent implements OnInit {
       this.globalQuestionNumber = 11;
     } else {
       this.globalQuestionNumber = -1;
+    }
+    this.TallQuestion();
+  }
+
+  private youCanSay(data: string) {
+    this.backupConversation.push({ type: 'Client', conversation: data });
+    if(data.toLowerCase().includes("next match")) {
+      this.globalQuestionNumber = 9;
+    } else if (data.toLowerCase().includes("make an offer")) {
+      this.globalQuestionNumber = 6;
+    } else {
+      this.globalQuestionNumber = -2;
     }
     this.TallQuestion();
   }
