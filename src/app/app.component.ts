@@ -262,7 +262,7 @@ export class AppComponent implements OnInit {
     this.backupConversation.push({ type: 'Client', conversation: data });
     if(data.toLowerCase().includes('look for a load') || data.toLowerCase().includes('Look for a new load') || data.toLowerCase().includes('find me a load')) {
       this.globalQuestionNumber = 2;
-    } else if (data.toLowerCase().includes('pod and the lumper receipt')){
+    } else if (data.toLowerCase().includes('pod and') || data.toLocaleLowerCase().includes('lumper receipt')){
       this.globalQuestionNumber = 11;
     } else {
       this.globalQuestionNumber = -1;
