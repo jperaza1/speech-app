@@ -270,6 +270,7 @@ export class AppComponent implements OnInit {
         this.backupConversation.push({ type: "Angie", conversation: "Sorry, I can't find anything. How can i help You ?" });
         await this.speeck("Sorry, I can't find anything. How can i help You ?");
         this.webSpeech();
+        break;
       case -2:
         this.backupConversation.push({ type: "Angie", conversation: "Sorry, I can't find anything" });
         await this.speeck("Sorry, I can't find anything");
@@ -278,6 +279,7 @@ export class AppComponent implements OnInit {
         this.backupConversation.push({ type: "Angie", conversation: 'Or you can say "Next", and I will tell you about the Next Match.' });
         await this.speeck('Or you can say "Next", and I will tell you about the Next Match.');
         this.webSpeech();
+        break;
     }
   }
 
