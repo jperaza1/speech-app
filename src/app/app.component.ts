@@ -237,7 +237,8 @@ export class AppComponent implements OnInit {
 
   private howCanIHelpYou(data: string) {
     this.backupConversation.push({ type: 'Client', conversation: data });
-    if(data.toLowerCase().includes('look for a load') || data.toLowerCase().includes('look for a new load') || data.toLowerCase().includes('find me a load')) {
+     
+    if(data.toLowerCase().includes('look for a') || data.toLowerCase().includes('look for a new') || data.toLowerCase().includes('i need a') || data.toLowerCase().includes("find me a")) {
       this.globalQuestionNumber = 2;
     } else {
       this.globalQuestionNumber = -1;
