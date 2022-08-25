@@ -172,7 +172,7 @@ export class AppComponent implements OnInit {
 
   private howCanIHelpYou(data: string) {
     this.backupConversation.push({ type: 'Client', conversation: data });
-    if (data.toLowerCase().includes('pod and') || data.toLocaleLowerCase().includes('lumper receipt')){
+    if (data.toLowerCase().includes('pod') || data.toLocaleLowerCase().includes('lumper receipt') || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last shipment')) || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last load')) || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last delivery'))){
       this.globalQuestionNumber = 11;
     } else {
       this.globalQuestionNumber = -1;
