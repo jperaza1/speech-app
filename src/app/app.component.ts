@@ -148,8 +148,8 @@ export class AppComponent implements OnInit {
         this.webSpeech();
         break;
       case 2:
-        this.backupConversation.push({ type: "Angie", conversation: 'Ofcourse,' });
-        await this.speeck('.... Ofcourse,');
+        this.backupConversation.push({ type: "Angie", conversation: 'Of course,' });
+        await this.speeck('.... Of course,');
         this.backupConversation.push({ type: "Angie", conversation: 'I understand that you have a Reefer trailer. Is that correct?' });
         await this.speeck('....  I understand that you have a Reefer trailer. Is that correct?');
         this.webSpeech();
@@ -162,7 +162,7 @@ export class AppComponent implements OnInit {
       case 4:
         this.backupConversation.push({ type: "Angie", conversation: 'Where to?' });
         await this.speeck('    Where to?');
-        this.backupConversation.push({ type: "Angie", conversation: 'You can ask for particular State, or say "Anywhere"' });
+        this.backupConversation.push({ type: "Angie", conversation: 'You can ask for a particular State, or say "Anywhere"' });
         await this.speeck('    You can ask for particular State, or say "Anywhere"');
         this.webSpeech();
         break;
@@ -171,8 +171,8 @@ export class AppComponent implements OnInit {
         await this.speeck('I am looking.....');
         this.backupConversation.push({ type: "Angie", conversation: 'I found some matches. I will offer the best 3 matches, based on your preferences of Destinations, Loaded Miles, and Rate Per Mile. Here they are:' });
         await this.speeck('I found some matches. I will offer the best 3 matches, based on your preferences of Destinations, Loaded Miles, and Rate Per Mile. Here they are:');
-        this.backupConversation.push({ type: "Angie", conversation: '1, Broker: CH Robinson, Origen: Atlanta, GA, which is 32 miles from your last delivery. Reefer Load, Fish, Destination: Los Angeles, CA, 2183 Loaded Miles, Rate Offered is $ 5500, an average of $2.50 per mile.		' });
-        await this.speeck('1, Broker: C H Robinson, Origen: Atlanta, Georgia, which is 32 miles from your last delivery. Reefer Load, Fish, Destination: Los Angeles, California, 2183 Loaded Miles, Rate Offered is $ 5500, an average of $2.50 per mile');
+        this.backupConversation.push({ type: "Angie", conversation: '1, Broker: CH Robinson, Picks up in Atlanta: Atlanta, GA, which is 32 miles from your last delivery. Reefer Load, Fish, Destination: Los Angeles, CA, 2183 Loaded Miles, Rate Offered is $ 5500, an average of $2.50 per mile.		' });
+        await this.speeck('1, Broker: C H Robinson, Picks up in Atlanta, Georgia, which is 32 miles from your last delivery. Reefer Load, Fish, Destination: Los Angeles, California, 2183 Loaded Miles, Rate Offered is $ 5500, an average of $2.50 per mile');
         this.backupConversation.push({ type: "Angie", conversation: 'If you Like it, you can say "Book It", or "Make an Offer"' });
         await this.speeck('If you Like it, you can say "Book It", or "Make an Offer"    ');
         this.backupConversation.push({ type: "Angie", conversation: 'Or you can say "Next", and I will tell you about the Next Match. ' });
