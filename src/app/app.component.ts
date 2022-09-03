@@ -146,8 +146,8 @@ export class AppComponent implements OnInit {
         this.webSpeech();
         break;
       case 14: 
-        this.backupConversation.push({ type: "Angie", conversation: 'Done. Can I help you with anything else?' });
-        await this.speeck('Done. Can I help you with anything else?');
+        this.backupConversation.push({ type: "Angie", conversation: 'Done. The new invoice number is # 35621 and was already sent. Can I help you with anything else?' });
+        await this.speeck('Done. The new invoice number is # 35621 and was already sent. Can I help you with anything else?');
         this.webSpeech();
         break;
       case 15: 
@@ -172,7 +172,7 @@ export class AppComponent implements OnInit {
 
   private howCanIHelpYou(data: string) {
     this.backupConversation.push({ type: 'Client', conversation: data });
-    if (data.toLowerCase().includes('pod') || data.toLocaleLowerCase().includes('lumper receipt') || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last shipment')) || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last load')) || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last delivery'))){
+    if (data.toLowerCase().includes('pod') || data.toLocaleLowerCase().includes('lumper receipt') || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last shipment')) || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last load')) || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last delivery')) || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last shipment'))){
       this.globalQuestionNumber = 11;
     } else {
       this.globalQuestionNumber = -1;
