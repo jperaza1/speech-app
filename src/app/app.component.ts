@@ -87,17 +87,6 @@ export class AppComponent implements OnInit {
             this.globalQuestionNumber = 13;
             this.TallQuestion();
             break;
-          case 13:
-            this.backupConversation.push({ type: 'Client', conversation: data.value });
-            this.globalQuestionNumber = 14;
-            this.TallQuestion();
-            break;
-          case 14:
-            this.anythingElseCanIHelpYou(data.value);
-            break;
-          case 15:
-            this.anythingElseCanIHelpYou(data.value);
-            break;
         }
       } else if(data.type === 'hint' && (this.globalQuestionNumber === 1 || this.globalQuestionNumber === 100) && data.value === 'Stopped capturing audio.'){
         this.stopWebSpeech();
@@ -131,30 +120,18 @@ export class AppComponent implements OnInit {
         this.webSpeech();
         break;
       case 11: 
-        this.backupConversation.push({ type: "Angie", conversation: 'Yes we do have the POD and Lumper Receipt for the Last Delivery in Los Angeles, CA. However, Billing is Pending. Do you want me to take care of the Billing Now?' });
-        await this.speeck('Yes we do have the P O D and Lumper Receipt for the Last Delivery in Los Angeles, California. However, Billing is Pending. Do you want me to take care of the Billing Now?');
+        this.backupConversation.push({ type: "Angie", conversation: 'Nice to meet you too Brian. How are you today?' });
+        await this.speeck('Nice to meet you too Brian. How are you today?');
         this.webSpeech();
         break;
       case 12: 
-        this.backupConversation.push({ type: "Angie", conversation: 'Do you have any other charges that you want me to add? I noticed that based on our Geo Fencing Monitoring, we spent 3 hours at the pick up Location and 6 hours at the Delivery. My calculations tell me that you should charge $ 50 for Waiting time at the Pick Up Location and $ 250 for Waiting Time at the Delivery Location. Should I add those charges?' });
-        await this.speeck('Do you have any other charges that you want me to add? I noticed that based on our Geo Fencing Monitoring, we spent 3 hours at the pick up Location and 6 hours at the Delivery. My calculations tell me that you should charge $ 50 for Waiting time at the Pick Up Location and $ 250 for Waiting Time at the Delivery Location. Should I add those charges?');
+        this.backupConversation.push({ type: "Angie", conversation: 'Good' });
+        await this.speeck('Good');
         this.webSpeech();
         break;
       case 13: 
-        this.backupConversation.push({ type: "Angie", conversation: 'OK. The Load Confirmation was for $ 5500, plus $ $ 150 for Lumper Fees, and $ 50 Waiting Time at the Pick Up Location, and $ 250 Waiting Time at the Delivery Location. The Invoice Total is now $ 5,950. Please confirm if this sounds correct to you, and I will take care of it right now. Should I proceed?' });
-        await this.speeck('OK. The Load Confirmation was for $ 5500, plus $ $ 150 for Lumper Fees, and $ 50 Waiting Time at the Pick Up Location, and $ 250 Waiting Time at the Delivery Location. The Invoice Total is now $ 5,950. Please confirm if this sounds correct to you, and I will take care of it right now. Should I proceed?');
-        this.webSpeech();
-        break;
-      case 14: 
-        this.backupConversation.push({ type: "Angie", conversation: 'Done. The new invoice number is # 35621 and was already sent. Can I help you with anything else?' });
-        await this.speeck('Done. The new invoice number is # 35621 and was already sent. Can I help you with anything else?');
-        this.webSpeech();
-        break;
-      case 15: 
-        this.backupConversation.push({ type: "Angie", conversation: 'I will start working on that. I will monitor all Loads every 15 minutes, and the moment that I find one that you may like, I will text you. OK?' });
-        await this.speeck('I will start working on that. I will monitor all Loads every 15 minutes, and the moment that I find one that you may like, I will text you. OK?');
-        this.backupConversation.push({ type: "Angie", conversation: 'Done. Can I help you with anything else?' });
-        await this.speeck('Done. Can I help you with anything else?');
+        this.backupConversation.push({ type: "Angie", conversation: 'My creators name is Juan Basanez. But you can call him JJ' });
+        await this.speeck('My creators name is Juan Basanez. But you can call him JJ');
         this.webSpeech();
         break;
       case 100:
@@ -172,7 +149,7 @@ export class AppComponent implements OnInit {
 
   private howCanIHelpYou(data: string) {
     this.backupConversation.push({ type: 'Client', conversation: data });
-    if (data.toLowerCase().includes('pod') || data.toLocaleLowerCase().includes('lumper receipt') || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last shipment')) || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last load')) || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last delivery')) || (data.toLocaleLowerCase().includes('update') && data.toLocaleLowerCase().includes('last shipment'))){
+    if (data.toLowerCase().includes('i am')){
       this.globalQuestionNumber = 11;
     } else {
       this.globalQuestionNumber = -1;
