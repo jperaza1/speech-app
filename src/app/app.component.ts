@@ -78,7 +78,6 @@ export class AppComponent implements OnInit {
             break;
           case 11:
             this.backupConversation.push({ type: 'Client', conversation: data.value });
-            this.model.truckNumber = data.value;
             this.globalQuestionNumber = 12;
             this.TallQuestion();
             break;
@@ -125,8 +124,8 @@ export class AppComponent implements OnInit {
         this.webSpeech();
         break;
       case 12: 
-        this.backupConversation.push({ type: "Angie", conversation: 'Good' });
-        await this.speeck('Good');
+        this.backupConversation.push({ type: "Angie", conversation: 'Good, How can i help You ?' });
+        await this.speeck('Good, How can i help You?');
         this.webSpeech();
         break;
       case 13: 
