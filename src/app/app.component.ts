@@ -131,7 +131,6 @@ export class AppComponent implements OnInit {
       case 13: 
         this.backupConversation.push({ type: "Angie", conversation: 'My creators name is Juan Basanez. But you can call him JJ' });
         await this.speeck('My creators name is Juan Basanez. But you can call him JJ');
-        this.webSpeech();
         break;
       case 100:
         this.backupConversation.push({ type: "Angie", conversation: 'If you need me, just touch my face on your Mobile App' });
