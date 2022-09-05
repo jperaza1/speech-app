@@ -141,8 +141,8 @@ export class AppComponent implements OnInit {
         this.webSpeech();
         break;
       case 13: 
-        this.backupConversation.push({ type: "Angie", conversation: 'OK. The Load Confirmation was for $ 5500, plus $ $ 150 for Lumper Fees, and $ 50 Waiting Time at the Pick Up Location, and $ 250 Waiting Time at the Delivery Location. The Invoice Total is now $ 5,950. Please confirm if this sounds correct to you, and I will take care of it right now. Should I proceed?' });
-        await this.speeck('OK. The Load Confirmation was for $ 5500, plus $ $ 150 for Lumper Fees, and $ 50 Waiting Time at the Pick Up Location, and $ 250 Waiting Time at the Delivery Location. The Invoice Total is now $ 5,950. Please confirm if this sounds correct to you, and I will take care of it right now. Should I proceed?');
+        this.backupConversation.push({ type: "Angie", conversation: 'OK. The Load Confirmation was for $ 5500, plus $ 150 for Lumper Fees, and $ 50 Waiting Time at the Pick Up Location, and $ 250 Waiting Time at the Delivery Location. The Invoice Total is now $ 5,950. Please confirm if this sounds correct to you, and I will take care of it right now. Should I proceed?' });
+        await this.speeck('OK. The Load Confirmation was for $ 5500, plus $ 150 for Lumper Fees, and $ 50 Waiting Time at the Pick Up Location, and $ 250 Waiting Time at the Delivery Location. The Invoice Total is now $ 5,950. Please confirm if this sounds correct to you, and I will take care of it right now. Should I proceed?');
         this.webSpeech();
         break;
       case 14: 
