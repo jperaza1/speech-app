@@ -96,7 +96,9 @@ export class AppComponent implements OnInit {
             this.anythingElseCanIHelpYou(data.value);
             break;
           case 15:
-            this.anythingElseCanIHelpYou(data.value);
+            this.backupConversation.push({ type: 'Client', conversation: data.value });
+            this.globalQuestionNumber = 16;
+            this.TallQuestion();
             break;
         }
       } else if(data.type === 'hint' && (this.globalQuestionNumber === 1 || this.globalQuestionNumber === 100) && data.value === 'Stopped capturing audio.'){
@@ -146,16 +148,18 @@ export class AppComponent implements OnInit {
         this.webSpeech();
         break;
       case 14: 
-        this.backupConversation.push({ type: "Angie", conversation: 'Done. The new invoice number is # 35621 and was already sent. Can I help you with anything else?' });
-        await this.speeck('Done. The new invoice number is # 35621 and was already sent. Can I help you with anything else?');
+        this.backupConversation.push({ type: "Angie", conversation: 'Done. The new invoice number is 35621 and was already sent. Can I help you with anything else?' });
+        await this.speeck('Done. The new invoice number is 35621 and was already sent. Can I help you with anything else?');
         this.webSpeech();
         break;
       case 15: 
         this.backupConversation.push({ type: "Angie", conversation: 'I will start working on that. I will monitor all Loads every 15 minutes, and the moment that I find one that you may like, I will text you. OK?' });
         await this.speeck('I will start working on that. I will monitor all Loads every 15 minutes, and the moment that I find one that you may like, I will text you. OK?');
-        this.backupConversation.push({ type: "Angie", conversation: 'Done. Can I help you with anything else?' });
-        await this.speeck('Done. Can I help you with anything else?');
         this.webSpeech();
+        break;
+      case 16: 
+        this.backupConversation.push({ type: "Angie", conversation: 'You are welcome' });
+        await this.speeck('You are welcome');
         break;
       case 100:
         this.backupConversation.push({ type: "Angie", conversation: 'If you need me, just touch my face on your Mobile App' });
