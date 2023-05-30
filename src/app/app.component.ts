@@ -98,7 +98,7 @@ export class AppComponent implements OnInit {
 
     const matches = this.keywordCount(sentence, keywords);
 
-    if(matches > 0) {
+    if(matches === keywords.length) {
       await this.validateTruckNumber(sentence);
 
       
