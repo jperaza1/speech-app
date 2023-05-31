@@ -329,18 +329,31 @@ class AppComponent {
     }
     UpdateLoad(sentence) {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            const keywords = ["update", "load", "truck"];
+            const keywords = ["update", "load"];
             const matches = this.keywordCount(sentence, keywords);
             if (matches > 0) {
-                yield this.validateTruckNumber(sentence);
+                yield this.getTruckNumber();
             }
             else {
+                this.backupConversation.push({ type: "Angie", conversation: "I'm sorry, you have not said anything, the question will be asked again" });
+                this.backupConversation.push({ type: "Angie", conversation: 'How can i help You ?' });
                 yield this.speeck("I'm sorry, you have not said anything, the question will be asked again");
                 yield this.speeck('How can i help You ?');
                 const response = yield this.webSpeech();
                 this.stopWebSpeech();
+                this.backupConversation.push({ type: 'Client', conversation: response.value });
                 yield this.UpdateLoad(response.value);
             }
+        });
+    }
+    getTruckNumber() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            this.backupConversation.push({ type: "Angie", conversation: 'Tell me the truck number' });
+            yield this.speeck("Tell me the truck number.....");
+            const response = yield this.webSpeech();
+            this.stopWebSpeech();
+            this.backupConversation.push({ type: 'Client', conversation: response.value });
+            this.validateTruckNumber(response.value);
         });
     }
     validateTruckNumber(sentence) {
@@ -352,6 +365,7 @@ class AppComponent {
                 yield this.speeck("  Please repeat the truck number again.....");
                 const response = yield this.webSpeech();
                 this.stopWebSpeech();
+                this.backupConversation.push({ type: 'Client', conversation: response.value });
                 yield this.validateTruckNumber(response.value);
             }
             else {
@@ -372,6 +386,7 @@ class AppComponent {
             yield this.speeck("  We do have the POD and Lumper Receipt for the Last Delivery in Los Angeles, CA. However, Billing is Pending. Do you want me to take care of the Billing Now?.....");
             const response = yield this.webSpeech();
             this.stopWebSpeech();
+            this.backupConversation.push({ type: 'Client', conversation: response.value });
             yield this.validateLoadInformation(response.value);
         });
     }
@@ -386,7 +401,7 @@ class AppComponent {
             }
             const matchesPositive = this.keywordCount(sentence, keywordsPositive);
             if (matchesPositive > 0) {
-                yield this.validatingForOtherActions(sentence);
+                yield this.validatingForOtherActions();
             }
             else {
                 this.backupConversation.push({ type: "Angie", conversation: "I'm sorry, you have not said anything, can you repeat your answer" });
@@ -409,15 +424,40 @@ class AppComponent {
         return keywordMatches.length;
     }
     extractTruckNumber(sentence) {
-        const match = sentence.match(/truck ((\d+\s*)+)/i) || sentence.match(/ ((\d+\s*)+)/i);
+        const match = sentence.match(/ ((\d+\s*)+)/i);
         return match ? match[1].replace(/\s+/g, '') : null;
     }
-    validatingForOtherActions(sentence) {
+    validatingForOtherActions() {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            this.backupConversation.push({ type: "Angie", conversation: 'If you need to add a charge tell me add the amount for the name of the charge, if you need to bill tell me bill the load.' });
+            this.backupConversation.push({ type: "Angie", conversation: 'If you need to add a charge tell me add, if you need to bill tell me bill.' });
             yield this.speeck("If you need to add a charge tell me add the amount for the name of the charge, if you need to bill tell me bill the load.");
             const response = yield this.webSpeech();
+            this.backupConversation.push({ type: 'Client', conversation: response.value });
             this.stopWebSpeech();
+            if (response.value.includes('add')) {
+                this.nameOfCharge();
+                return;
+            }
+            if (response.value.includes('bill')) {
+            }
+            this.backupConversation.push({ type: "Angie", conversation: "I'm sorry I don't understand your answer" });
+            yield this.speeck("I'm sorry I don't understand your answer");
+            this.validatingForOtherActions();
+        });
+    }
+    nameOfCharge() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            this.backupConversation.push({ type: "Angie", conversation: "Please tell me the name of the position you want to add." });
+            yield this.speeck("Please tell me the name of the position you want to add.");
+            const response = yield this.webSpeech();
+            this.backupConversation.push({ type: 'Client', conversation: response.value });
+            this.stopWebSpeech();
+            if (response.value.length > 0) {
+                return;
+            }
+            this.backupConversation.push({ type: "Angie", conversation: "I'm sorry I don't understand your answer" });
+            yield this.speeck("I'm sorry I don't understand your answer");
+            this.nameOfCharge();
         });
     }
     help() {

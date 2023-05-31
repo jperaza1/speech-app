@@ -94,21 +94,32 @@ export class AppComponent implements OnInit {
   }
 
   async UpdateLoad(sentence: string) {
-    const keywords = ["update", "load", "truck"];
+    const keywords = ["update", "load"];
 
     const matches = this.keywordCount(sentence, keywords);
 
-    if(matches === keywords.length) {
-      await this.validateTruckNumber(sentence);
-
-      
+    if(matches > 0) {
+      await this.getTruckNumber();
     }else {
+      this.backupConversation.push({ type: "Angie", conversation:"I'm sorry, you have not said anything, the question will be asked again"});
+      this.backupConversation.push({ type: "Angie", conversation:'How can i help You ?'});
       await this.speeck("I'm sorry, you have not said anything, the question will be asked again");
       await this.speeck('How can i help You ?');
       const response = await this.webSpeech();
       this.stopWebSpeech();
+      this.backupConversation.push({ type: 'Client', conversation: response.value });
       await this.UpdateLoad(response.value)
     }
+  }
+
+  async getTruckNumber() {
+    this.backupConversation.push({ type: "Angie", conversation: 'Tell me the truck number' });
+    await this.speeck("Tell me the truck number.....");
+    const response = await this.webSpeech();
+    this.stopWebSpeech();
+    this.backupConversation.push({ type: 'Client', conversation: response.value });
+
+    this.validateTruckNumber(response.value);
   }
 
   async validateTruckNumber(sentence: string) {
@@ -119,6 +130,7 @@ export class AppComponent implements OnInit {
       await this.speeck("  Please repeat the truck number again.....");
       const response = await this.webSpeech();
       this.stopWebSpeech();
+      this.backupConversation.push({ type: 'Client', conversation: response.value });
       await this.validateTruckNumber(response.value);
     } else {
       await this.getLoadInformation(truckNumber);
@@ -138,6 +150,7 @@ export class AppComponent implements OnInit {
     
     const response = await this.webSpeech();
     this.stopWebSpeech();
+    this.backupConversation.push({ type: 'Client', conversation: response.value });
     await this.validateLoadInformation(response.value);
 
   }
@@ -157,10 +170,7 @@ export class AppComponent implements OnInit {
     const matchesPositive = this.keywordCount(sentence, keywordsPositive);
 
     if(matchesPositive > 0) {
-
-      await this.validatingForOtherActions(sentence);
-
-
+      await this.validatingForOtherActions();
     } else {
       this.backupConversation.push({ type: "Angie", conversation: "I'm sorry, you have not said anything, can you repeat your answer" });
       await this.speeck("I'm sorry, you have not said anything, can you repeat your answer");
@@ -186,15 +196,73 @@ export class AppComponent implements OnInit {
   }
 
   extractTruckNumber(sentence: string): string | null {
-    const match = sentence.match(/truck ((\d+\s*)+)/i) || sentence.match(/ ((\d+\s*)+)/i);
+    const match = sentence.match(/ ((\d+\s*)+)/i);
     return match ? match[1].replace(/\s+/g, '') : null;
   }
 
-  async validatingForOtherActions(sentence: string) {
-    this.backupConversation.push({ type: "Angie", conversation: 'If you need to add a charge tell me add the amount for the name of the charge, if you need to bill tell me bill the load.' });
+  async validatingForOtherActions() {
+    this.backupConversation.push({ type: "Angie", conversation: 'If you need to add a charge tell me add, if you need to bill tell me bill.' });
     await this.speeck("If you need to add a charge tell me add the amount for the name of the charge, if you need to bill tell me bill the load.");
     const response = await this.webSpeech();
+    this.backupConversation.push({ type: 'Client', conversation: response.value });
     this.stopWebSpeech();
+
+    if(response.value.includes('add')){
+      await this.nameOfCharge();
+      return;
+    }
+
+    if(response.value.includes('bill')) {
+      await this.bill();
+      return;
+    }
+
+    this.backupConversation.push({ type: "Angie", conversation: "I'm sorry I don't understand your answer" });
+    await this.speeck("I'm sorry I don't understand your answer");
+    this.validatingForOtherActions();
+  }
+
+  async nameOfCharge() {
+    this.backupConversation.push({ type: "Angie", conversation: "Please tell me the name of the charge you want to add." });
+    await this.speeck("Please tell me the name of the charge you want to add.");
+    const response = await this.webSpeech();
+    this.backupConversation.push({ type: 'Client', conversation: response.value });
+    this.stopWebSpeech();
+
+    if(response.value.length > 0) {
+      this.valueOfCharge();
+     return; 
+    }
+
+    this.backupConversation.push({ type: "Angie", conversation: "I'm sorry I don't understand your answer" });
+    await this.speeck("I'm sorry I don't understand your answer");
+    this.nameOfCharge();
+
+  }
+
+  async valueOfCharge() {
+    this.backupConversation.push({ type: "Angie", conversation: "Tell me the value of the charge" });
+    await this.speeck("Tell me the value of the charge");
+    const response = await this.webSpeech();
+    this.backupConversation.push({ type: 'Client', conversation: response.value });
+    this.stopWebSpeech();
+
+    const truckNumber = this.extractTruckNumber(response.value);
+    
+    if(truckNumber === null) {
+      this.backupConversation.push({ type: "Angie", conversation: "I'm sorry I don't understand your answer" });
+      await this.speeck("I'm sorry I don't understand your answer");
+      this.valueOfCharge();
+    }
+    
+    await this.validatingForOtherActions();
+  }
+
+  async bill() {
+    this.backupConversation.push({ type: "Angie", conversation: "We will process your order" });
+    await this.speeck("We will process your order");
+    this.backupConversation.push({ type: "Angie", conversation: 'It was a pleasure to help you, if you need anything else do not hesitate to press the help button.' });
+    await this.speeck("  It was a pleasure to help you, if you need anything else do not hesitate to press the help button......");
   }
 
   async help(){
